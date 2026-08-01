@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Library Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ===================== TOP HEADER ===================== -->
+    <header class="top-header">
+        <div class="header-left">
+            <div class="logo-box">🎓</div>
+            <h1>College LMS</h1>
+        </div>
+        <h2 class="header-welcome">Welcome to College Library</h2>
+        <div class="user-circle">JS</div>
+    </header>
+
+    <!-- little popup message box for success/error alerts (instead of alert()) -->
+    <div id="toastBox" class="toast hidden"></div>
+
+    <div class="app-body">
+
+        <!-- ===================== SIDEBAR ===================== -->
+        <aside class="sidebar">
+            <nav>
+                <a href="#dashboard" class="nav-link">🏠 Dashboard</a>
+                <a href="#portal" class="nav-link">🎓 Student Portal</a>
+                <a href="#books" class="nav-link">📚 Books</a>
+                <a href="#students" class="nav-link">👥 Students</a>
+                <a href="#issue" class="nav-link">📤 Issue Book</a>
+                <a href="#return" class="nav-link">📥 Return Book</a>
+                <a href="#tracking" class="nav-link">🕒 Tracking Records</a>
+                <a href="#about" class="nav-link">ℹ️ About</a>
+            </nav>
+        </aside>
+
+        <!-- ===================== MAIN CONTENT ===================== -->
+        <main class="main-content">
+
+            <!-- ---------- DASHBOARD SECTION ---------- -->
+            <section id="dashboard">
+                <h2 class="section-title">Dashboard Overview</h2>
+                <p class="section-subtitle">Welcome back to the College Library Management System.</p>
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">📘</div>
+                        <p class="stat-value" id="statTotalBooks">0</p>
+                        <p class="stat-label">Total Books</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">👥</div>
+                        <p class="stat-value" id="statTotalStudents">0</p>
+                        <p class="stat-label">Total Students</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon amber">📤</div>
+                        <p class="stat-value" id="statIssued">0</p>
+                        <p class="stat-label">Books Issued</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon rose">⏰</div>
+                        <p class="stat-value" id="statOverdue">0</p>
+                        <p class="stat-label">Overdue Returns</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon teal">✅</div>
+                        <p class="stat-value" id="statOnTime">0</p>
+                        <p class="stat-label">On Time Returns</p>
+                    </div>
+                </div>
+
+                <div class="alert-box blue-alert">
+                    <strong>System Updated</strong>
+                    <p id="statSummary">Loading system summary...</p>
+                </div>
+            </section>
+
+            <hr class="section-divider">
+
+            <!-- ---------- STUDENT PORTAL SECTION ---------- -->
+            <section id="portal">
+                <h2 class="section-title">Student Portal</h2>
+                <p class="section-subtitle">Self-service: register yourself and borrow a book directly.</p>
+
+                <form id="portalForm" class="student-form card-form">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="portalName" placeholder="e.g. Ayesha Malik" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Class / Semester</label>
+                        <input type="text" id="portalClass" placeholder="e.g. BSCS 3rd Semester" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Roll No</label>
+                        <input type="text" id="portalRoll" placeholder="e.g. 2k26/CS/12" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="portalPhone" placeholder="e.g. 0300-1234567" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Book ID to Borrow</label>
+                        <input type="text" id="portalBookId" placeholder="e.g. B001" required>
+                    </div>
+                    <button type="submit" class="btn btn-blue">Borrow This Book</button>
+                </form>
+                <p class="table-note">This registers the student (if new) and issues the book in one step -
+                    same rule applies: max 3 books per student.</p>
+            </section>
+
+            <hr class="section-divider">
+
+            <!-- ---------- BOOKS SECTION ---------- -->
+            <section id="books">
+                <h2 class="section-title">Book Records</h2>
+                <p class="section-subtitle">Manage library inventory and track availability.</p>
+
+                <div class="search-box">
+                    <input type="text" id="bookSearchInput" placeholder="🔍 Search by Book ID or Name...">
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Book ID</th>
+                            <th>Book Name</th>
+                            <th>Author</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="booksTableBody">
+                        <!-- rows are filled in by script.js using a loop, same idea as
+                             the C++ displayBooks() function looping over the books array -->
+                    </tbody>
+                </table>
+
+                <h3 class="form-title">Add New Book</h3>
+                <form id="addBookForm" class="student-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Book ID</label>
+                            <input type="text" id="newBookId" placeholder="e.g. B046" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Book Name</label>
+                            <input type="text" id="newBookName" placeholder="e.g. Database Systems" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Author</label>
+                            <input type="text" id="newBookAuthor" placeholder="e.g. C.J. Date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Department</label>
+                            <input type="text" id="newBookDept" placeholder="e.g. CS" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-blue">Add Book</button>
+                </form>
+            </section>
+
+            <hr class="section-divider">
+
+            <!-- ---------- STUDENTS SECTION ---------- -->
+            <section id="students">
+                <h2 class="section-title">Student Records</h2>
+                <p class="section-subtitle">All students currently registered in the system.</p>
+
+                <div class="search-box">
+                    <input type="text" id="studentSearchInput" placeholder="🔍 Search by Student ID or Name...">
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Semester</th>
+                            <th>Phone</th>
+                            <th>Books Held</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody"></tbody>
+                </table>
+
+                <h3 class="form-title">Register New Student</h3>
+                <form id="addStudentForm" class="student-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Student ID</label>
+                            <input type="text" id="newStudentId" placeholder="e.g. 2k26/CS/50" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="newStudentName" placeholder="Full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Department</label>
+                            <input type="text" id="newStudentDept" placeholder="e.g. CS" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Semester</label>
+                            <input type="number" id="newStudentSemester" placeholder="e.g. 2" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" id="newStudentPhone" placeholder="e.g. 0300-1234567" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-green">Register Student</button>
+                </form>
+            </section>
+
+            <hr class="section-divider">
+
+            <!-- ---------- ISSUE BOOK SECTION ---------- -->
+            <section id="issue">
+                <h2 class="section-title">Issue Book</h2>
+                <form id="issueForm" class="student-form card-form">
+                    <div class="form-group">
+                        <label>Student ID</label>
+                        <input type="text" id="issueStudentId" placeholder="e.g. 2k26/CS/12" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Book ID</label>
+                        <input type="text" id="issueBookId" placeholder="e.g. B001" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Expected Return Date</label>
+                        <input type="date" id="issueReturnDate" required>
+                    </div>
+                    <button type="submit" class="btn btn-blue">Issue Book</button>
+                </form>
+            </section>
+
+            <hr class="section-divider">
+
+            <!-- ---------- RETURN BOOK SECTION ---------- -->
+            <section id="return">
+                <h2 class="section-title">Return Book</h2>
+                <p class="section-subtitle">Fine Rule: Rs. 50 per day late. Early or on-time returns have no fine.</p>
+                <form id="returnForm" class="student-form card-form">
+                    <div class="form-group">
+                        <label>Student ID</label>
+                        <input type="text" id="returnStudentId" placeholder="e.g. 2k26/CS/12" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Book ID</label>
+                        <input type="text" id="returnBookId" placeholder="e.g. B004" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Return Date</label>
+                        <input type="date" id="returnDate" required>
+                    </div>
+                    <button type="submit" class="btn btn-amber">Return Book</button>
+                </form>
+            </section>
+
+            <hr class="section-divider">
+
+            <!-- ---------- TRACKING RECORDS SECTION ---------- -->
+            <section id="tracking">
+                <h2 class="section-title">Tracking Records</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Book</th>
+                            <th>Issue Date</th>
+                            <th>Expected Return</th>
+                            <th>Fine</th>
+                            <th>Status</th>
+                            <th>Return Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trackingTableBody"></tbody>
+                </table>
+            </section>
+
+            <hr class="section-divider">
+
+            <!-- ---------- ABOUT SECTION ---------- -->
+            <section id="about">
+                <h2 class="section-title">About This Project</h2>
+                <div class="about-card">
+                    <p>
+                        This College Library Management System was built to solve a real problem
+                        at our university — keeping track of books, students, and issue/return
+                        records without relying on messy WhatsApp groups or paper registers.
+                    </p>
+                    <p>
+                        The core logic (adding books, issuing books, calculating fines,
+                        searching records) was first written in <strong>C++</strong>, using arrays,
+                        structs, loops, and conditional statements. This webpage now uses the
+                        <strong> exact same logic</strong>, rewritten in plain <strong>JavaScript</strong>
+                        so it works live in the browser, saved using <code>localStorage</code>. A
+                        <strong> Java</strong> Swing desktop version is also included as an alternative GUI.
+                    </p>
+                    <p>
+                        Want to reset all the data back to the starting sample? Use the button below.
+                    </p>
+                    <button id="resetDataBtn" class="btn btn-amber">Reset Demo Data</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="app-footer">
+        <p class="footer-name">Designed &amp; Developed by <strong>Jaweria Shakeel</strong></p>
+        <p class="footer-meta">1st Year &middot; BS Computer Science &middot; University of Mirpurkhas</p>
+        <div class="tech-tags">
+            <span class="tag tag-cpp">C++</span>
+            <span class="tag tag-html">HTML</span>
+            <span class="tag tag-css">CSS</span>
+            <span class="tag tag-js">JS</span>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
